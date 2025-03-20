@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Authentication</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        #login-form, #protected-content { display: none; }
+        .container { max-width: 300px; margin: auto; }
+        input { display: block; width: 100%; margin: 10px 0; padding: 8px; }
+        button { padding: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container" id="login-form">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="authenticate()">Login</button>
+        <p id="error-message" style="color:red;"></p>
+    </div>
+
+    <div class="container" id="protected-content">
+        <h2>Welcome!</h2>
+        <p>You have successfully logged in.</p>
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        const validUsername = "admin";
+        const validPassword = "password123";
+
+        function authenticate() {
+            let username = document.getElementById('username').value;
+            let password = document.getElementById('password').value;
+            if (username === validUsername && password === validPassword) {
+                localStorage.setItem("authenticated", true);
+                showProtectedContent();
+            } else {
+                document.getElementById('error-message').innerText = "Invalid credentials!";
+            }
+        }
+
+        function showProtectedContent() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('protected-content').style.display = 'block';
+        }
+
+        function logout() {
+            localStorage.removeItem("authenticated");
+            location.reload();
+        }
+
+        window.onload = function() {
+            if (localStorage.getItem("authenticated")) {
+                showProtectedContent();
+            } else {
+                document.getElementById('login-form').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
